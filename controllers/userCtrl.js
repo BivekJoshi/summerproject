@@ -4,8 +4,6 @@ const jwt = require("jsonwebtoken");
 const doctorModel = require("../models/doctorModel");
 const appointmentModel = require("../models/appointmentModel");
 const moment = require("moment");
-
-
 //register callback
 const registerController = async (req, res) => {
   try {
@@ -27,6 +25,42 @@ const registerController = async (req, res) => {
     res.status(500).send({
       success: false,
       message: `Register Controller ${error.message}`,
+    });
+  }
+};
+
+const changePasswordController = async (req, res) => {
+  try {
+    // Assuming user is authenticated and user ID is available in req.user.id
+    const userId = req.user.id;
+    
+    // Find the user by ID
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).send({ message: "User not found", success: false });
+    }
+
+    // Compare current password with the stored hash
+    const isMatch = await bcrypt.compare(req.body.currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).send({ message: "Current password is incorrect", success: false });
+    }
+
+    // Hash the new password
+    const newPassword = req.body.newPassword;
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update the user's password
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).send({ message: "Password changed successfully", success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: `Change Password Controller ${error.message}`,
     });
   }
 };
@@ -277,4 +311,5 @@ module.exports = {
   bookeAppointmnetController,
   bookingAvailabilityController,
   userAppointmentsController,
+  changePasswordController,
 };

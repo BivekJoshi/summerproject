@@ -5,6 +5,7 @@ const {
   changeAccountStatusController,
 } = require("../controllers/adminCtrl");
 const authMiddleware = require("../middlewares/authMiddleware");
+const { postPetController } = require("../controllers/petCtrl");
 
 const router = express.Router();
 
@@ -20,5 +21,7 @@ router.post(
   authMiddleware,
   changeAccountStatusController
 );
+
+router.post("/add-pet", postPetController);
 
 module.exports = router;

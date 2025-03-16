@@ -10,6 +10,7 @@ const {
   bookeAppointmnetController,
   bookingAvailabilityController,
   userAppointmentsController,
+  changePasswordController,
 } = require("../controllers/userCtrl");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -19,6 +20,8 @@ const router = express.Router();
 //routes
 //LOGIN || POST
 router.post("/login", loginController);
+
+router.post("/changePassword", changePasswordController);
 
 //REGISTER || POST
 router.post("/register", registerController);

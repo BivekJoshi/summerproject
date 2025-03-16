@@ -13,6 +13,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "password is require"],
   },
+  breed: {
+    type: String,
+  },
+  age: {
+    type: String,
+  },
+  color: {
+    type: String,
+  },
+  coat: {
+    type: String,
+  },
   isAdmin: {
     type: Boolean,
     default: false,
